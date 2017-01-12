@@ -1,0 +1,58 @@
+The BioID Face Database
+-----------------------
+The BioID Face Database has been recorded and is published to give all researchers working in the
+area of face detection the possibility to compare the quality of their face detection algorithms
+with others. During the recording special emphasis has been laid on "real world" conditions.
+Therefore the testset features a large variety of illumination, background and face size. 
+Some typical sample images are shown below.
+
+Description of the BioID Face Database
+--------------------------------------
+The dataset consists of 1521 gray level images with a resolution of 384x286 pixel. Each one 
+shows the frontal view of a face of one out of 23 different test persons. For comparison reasons the set also contains 
+manually set eye postions. The images are labeled "BioID_xxxx.pgm" where the characters xxxx
+are replaced by the index of the current image (with leading zeros). Similar to this, the 
+files "BioID_xxxx.eye" contain the eye positions for the corresponding images.
+
+Image File Format
+-----------------
+The images are stored in single files using the portable gray map (pgm) data format. A pgm 
+file contains a data header followed by the image data. In our case the header consists of 
+four lines of text. In detail:
+
+- the first line describes the format of the image data (ASCII/binary). In our files the text 
+  "P5" indicates that the data is written in binary form
+
+- the second line contains the image width written in text form
+
+- the third line keeps the image height also in text form
+
+- the fourth line contains the maximum allowed gray value (255 in our images)
+
+The header is followed by a data block containing the image data. The data is stored line per 
+line from top to bottom using one byte per pixel.
+
+Eye Position File Format
+------------------------
+The eye position files are text files containing a single comment line followed by the x and the 
+y coordinate of the left eye and the x and the y coordinate of the right eye separated by spaces.
+Note that we refer to the left eye as the person's left eye. Therefore, when captured by a camera, 
+the position of the left eye is on the image's right and vice versa.
+
+Evaluation of Face Detection Algorithms
+---------------------------------------
+To give the possibility to compare the quality of different face detection algorithms on the testset we propose 
+the following distance based quality measure. Estimate the eye positions with your algorithm and 
+calculate the absolute pixel distance from the manually set positions so that you receive two distance 
+values. Choose the larger value and divide by the absolute pixel distance of the two manually set eye 
+postions so that you become independent from the face's size in the image. We call this value 
+relative eye distance. When calculating this distance for each image you can choose the distribution 
+function of the relative distances to compare some results with others. Alternatively we recommend
+to rate a face as found if the relative distance is equal or less than 0.25, which corresponds to an
+accuracy of about half the width of an eye in the image. The detection rate can directly be calculated by dividing
+the number of correctly found faces by the total number of faces in the dataset.
+The results fo the BioID face detection algorithms can be found in a paper that will be published
+at the AVBPA01 ((link: http://www.hh.se/avbpa/)) (Audio- and Video-Based Biometric Person Authentication) 
+conference taking place in Halmstad, Sweden in June 2001. 
+
+For recommendations or questions send an e-mail to: research@bioid.com.
