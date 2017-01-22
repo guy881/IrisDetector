@@ -10,6 +10,7 @@ capture = cv2.VideoCapture(0)
 
 while True:
     ret, frame = capture.read()
+    frame = cv2.flip(frame, 1)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     eyes = eye_cascade.detectMultiScale(gray, 1.3, 5)
