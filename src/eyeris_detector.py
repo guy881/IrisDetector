@@ -4,6 +4,14 @@ from os.path import join
 
 
 def show_image_with_data(frame, blinks, irises, err=None):
+    """
+    Helper function to draw points on eyes and display frame
+    :param frame: image to draw on
+    :param blinks: number of blinks
+    :param irises: array of points with coordinates of irises
+    :param err: for displaying current error in Lucas-Kanade tracker
+    :return:
+    """
     font = cv2.FONT_HERSHEY_SIMPLEX
     if err:
         cv2.putText(frame, str(err), (20, 450), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
@@ -14,6 +22,9 @@ def show_image_with_data(frame, blinks, irises, err=None):
 
 
 class ImageSource:
+    """
+    Returns frames from camera
+    """
     def __init__(self):
         self.capture = cv2.VideoCapture(0)
 
@@ -29,8 +40,14 @@ class ImageSource:
 
 
 class CascadeClassifier:
-    def __init__(self):
-        self.eye_cascade = cv2.CascadeClassifier(join('haar', 'haarcascade_eye_tree_eyeglasses.xml'))
+    """
+    This classifier is trained by default in OpenCV
+    """
+    def __init__(self, glasses=True):
+        if glasses:
+            self.eye_cascade = cv2.CascadeClassifier(join('haar', 'haarcascade_eye_tree_eyeglasses.xml'))
+        else:
+            self.eye_cascade = cv2.CascadeClassifier(join('haar', 'haarcascade_eye.xml'))
 
     def get_irises_location(self, frame_gray):
         eyes = self.eye_cascade.detectMultiScale(frame_gray, 1.3, 5)  # if not empty - eyes detected
@@ -45,6 +62,9 @@ class CascadeClassifier:
 
 
 class LucasKanadeTracker:
+    """
+    Lucaas-Kanade tracker used for minimizing cpu usage and blinks counter
+    """
     def __init__(self, blink_threshold=9):
         # Parameters for lucas kanade optical flow
         self.lk_params = dict(winSize=(15, 15),
@@ -73,6 +93,11 @@ class LucasKanadeTracker:
 
 
 class EyerisDetector:
+    """
+    Main class which use image source, classifier and tracker to estimate iris postion
+    Algorithm used in detector is designed for one person (with two eyes)
+    It can detect more than two eyes, but it tracks only two
+    """
     def __init__(self, image_source, classifier, tracker):
         self.tracker = tracker
         self.classifier = classifier
