@@ -3,6 +3,8 @@ This project is using OpenCv along with Python to detect pupils of your eyes usi
 
 Algorithm isn't perfect but I think it's quite interesting. Except detecting pupils it also counts blinks.
 
+The code was intended to be run on Python 2.7.
+
 Screenshots:
 
 ![Pupils detection in action][screen1]
